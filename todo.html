@@ -1,0 +1,170 @@
+<html>
+
+<head>
+    <title>Day 34 - Counter App</title>
+    <style>
+        .wrapper {
+            width: 500px;
+            margin: 0 auto;
+            text-align: center;
+            /* background-color: gray; */
+            min-height: 80vh;
+        }
+
+        .todo-wrapper {
+            list-style: none;
+            padding: 0;
+        }
+
+        .todo-wrapper li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .todo-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .todo-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-delete {
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            background-color: green;
+            color: white;
+        }
+
+        .todo-footer {
+            margin-top: 20px;
+            background-color: #ccc;
+            padding: 10px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+        }
+
+        .btn-add {
+            margin: 10px;
+            padding: 10px;
+        }
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="root" class="wrapper"></div>
+
+    <script type="text/babel">
+        let uniqId = 0;
+
+        function TodoApp() {
+            const [inputValue, setInputValue] = React.useState('');
+            const [todos, setTodos] = React.useState([]);
+
+            const handleInputChange = (e) => {
+                setInputValue(e.target.value); // Lấy giá trị từ input
+            };
+
+            const handleSubmit = (e) => {
+                e.preventDefault(); // Ngăn trang reload khi submit form
+                if (inputValue.trim()) {
+                    setTodos([...todos, { id: ++uniqId, text: inputValue, completed: false }]);
+                    setInputValue(''); // Reset input sau khi thêm
+                }
+            };
+
+            const handleDelete = (id) => {
+                setTodos(todos.filter(todo => todo.id !== id));
+            }
+
+            const toggleCompleted = (id) => {
+                setTodos(todos.map(todo => {
+                    if (todo.id === id) {
+                        return { ...todo, completed: !todo.completed };
+                    }
+                    return todo;
+                }))
+            }
+
+            return (
+                <div>
+                    <form onSubmit={handleSubmit}>
+                        <input
+                            value={inputValue}
+                            onChange={handleInputChange}
+                            placeholder="Nhập task mới..."
+                            type="text"
+                        />
+                        <button type="submit" className="btn-add">Thêm</button>
+                    </form>
+
+
+                    {
+                        todos.length === 0 && <span>Chưa có task nào. Hãy thêm task đầu tiên!</span>
+                    }
+                    <ul className="todo-wrapper">
+                        {
+                            todos.map(todo => {
+                                return (
+                                    <li key={todo.id} className={todo.completed ? 'completed' : ''}>
+                                        <div className="todo-left">
+                                            {todo.text}
+
+                                        </div>
+                                        <div className="todo-right">
+                                            <i
+                                                className={todo.completed ? "fa-regular fa-circle-check" : "fa-regular fa-circle"}
+                                                style={{ color: todo.completed ? "green" : "gray", cursor: "pointer" }}
+                                                onClick={() => toggleCompleted(todo.id)}
+                                            ></i>
+                                            <button onClick={() => handleDelete(todo.id)} className="btn-delete">
+                                                <i className="fa-solid fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </li>
+                                )
+                            })
+                        }
+                    </ul>
+
+                    <div className="todo-footer">
+                        Tổng: {todos.length} task(s),
+                        Hoàn thành {todos.filter(todo => todo.completed).length} task(s),
+                        Còn lại {todos.filter(todo => !todo.completed).length} task(s)
+                    </div>
+                </div>
+            );
+        }
+
+        const app = (
+            <>
+                <h1>Todo App</h1>
+                <TodoApp />
+
+            </>
+        );
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(app);
+
+    </script>
+</body>
+
+</html>
