@@ -32,6 +32,7 @@
             color: red;
         }
     </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -39,26 +40,26 @@
 
 <body>
     <div id="root" class="wrapper"></div>
-    
+
     <script type="text/babel">
         function Counter() {
             const [number, setNumber] = React.useState(0);
             return (
                 <>
-                    <h1 className={number === 0 ? 'zero' : number > 0 ? 'positive' : 'negative'}>{number}</h1>
+                    <h1 className={number === 0 ? "zero" : number > 0 ? "positive" : "negative"}>{number}</h1>
 
-                    <button onClick={() => { setNumber(number + 1) }}>
-                        Tăng (+1)
-                    </button>
                     <button onClick={() => { setNumber(number - 1) }}>
                         Giảm (-1)
                     </button>
                     <button onClick={() => { setNumber(0) }}>
                         Reset (0)
                     </button>
+                    <button onClick={() => { setNumber(number + 1) }}>
+                        Tăng (+1)
+                    </button>
 
-                    <div class="message">
-                        {number === 0 ? 'Bằng 0' : number > 0 ? 'Dương' : 'Âm'}
+                    <div className='message'>
+                        {number === 0 ? "Bằng 0" : number > 0 ? "Dương" : "Âm"}
                     </div>
                 </>
             );
@@ -66,7 +67,7 @@
 
         const app = (
             <>
-                <h1>Counter App</h1>
+                <h1><a href="index.html"><i className="fa fa-home"></i></a> Counter App</h1>
                 <Counter />
             </>
         );
