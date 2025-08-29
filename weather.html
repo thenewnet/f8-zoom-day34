@@ -1,0 +1,150 @@
+<html>
+
+<head>
+    <title>Day 34 - Weather App</title>
+    <style>
+        .wrapper {
+            width: 500px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 16px 24px;
+            max-width: 400px;
+            margin: 20px auto;
+            font-family: sans-serif;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+
+        .row:last-child {
+            border-bottom: none;
+        }
+
+        .left {
+            font-weight: 600;
+            color: #555;
+            text-align: left;
+        }
+
+        .right {
+            color: #222;
+            text-align: left;
+        }
+        select {
+            padding: 10px;
+        }
+        button {
+            padding: 10px;
+        }
+        .control {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="root" class="wrapper"></div>
+
+    <script type="text/babel">
+        function WeatherApp() {
+            const [city, setCity] = React.useState({});
+
+            const weatherData = {
+                "hanoi": { id: "hanoi", city: "Hà Nội", temp: 28, weather: "Nắng", humidity: 65, icon: "☀️" },
+                "hcm": { id: "hcm", city: "TP.HCM", temp: 32, weather: "Có mây", humidity: 78, icon: "🌤️" },
+                "danang": { id: "danang", city: "Đà Nẵng", temp: 30, weather: "Mưa nhẹ", humidity: 82, icon: "🌧️" }
+            };
+
+            const handleOnChange = (city) => {
+                console.log(weatherData[city]);
+                setCity(weatherData[city]);
+            }
+
+            const handleOnRefresh = () => {
+                if(!city.id) return;
+                const newData = { ...city, temp: getRandom(city.temp), humidity: getRandom(city.humidity) };
+                setCity(newData);
+                getRandom();
+            }
+            const getRandom = (value) => {
+                const max = value + 5;
+                const min = value - 5;
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+            return (
+                <>
+
+                    <div className="control">
+                        <select value={city.id} onChange={(e) => handleOnChange(e.target.value)}>
+                            <option value="-">Vui lòng chọn thành phố</option>
+                            <option value="hanoi">Hà Nội</option>
+                            <option value="hcm">TP.HCM</option>
+                            <option value="danang">Đà Nẵng</option>
+                        </select>
+                        <button onClick={handleOnRefresh}>Làm mới</button>
+                    </div>
+
+                    <div className="card">
+                        <div className="row">
+                            <div className="left">Tên thành phố:</div>
+                            <div className="right">{city.city}</div>
+                        </div>
+
+                        <div className="row">
+                            <div className="left">Nhiệt độ (°C):</div>
+                            <div className="right">{city.temp}</div>
+                        </div>
+
+                        <div className="row">
+                            <div className="left">Tình trạng thời tiết:</div>
+                            <div className="right">{city.weather} {city.icon}</div>
+                        </div>
+
+                        <div className="row">
+                            <div className="left">Độ ẩm (%):</div>
+                            <div className="right">{city.humidity}</div>
+                        </div>
+                    </div>
+
+
+
+                </>
+
+            );
+        }
+
+        const app = (
+            <>
+                <h1><a href="index.html"><i className="fa fa-home"></i></a> Weather App</h1>
+                <WeatherApp />
+            </>
+        );
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(app);
+
+    </script>
+
+
+</body>
+
+</html>
